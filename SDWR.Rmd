@@ -1,0 +1,72 @@
+---
+title: "AbgabeSPWR"
+output: html_document
+---
+
+
+
+
+
+CSV Datei einladen 
+
+
+Als Funktion Daten einladen und anzeigen
+```{r pressure, echo=TRUE}
+einladenundanzeigen<-function(){
+  T1<-read.csv2(file.choose(), na="Na")
+  T1
+  laenge<- length(T1) 
+  laenge
+  MyFunction()
+}
+```
+
+
+
+```{r pressure, echo=TRUE}
+
+#Fit data to numeric 
+newT1<- sapply(T1, as.numeric)
+
+
+#Use data within a dataframe
+T1allData<- data.frame(newT1)
+#Funkction to print all Histograms of each colum
+MyFunction<- function(x) for(i in 9:ncol(x))
+{
+  hist(x[,i],main=paste("Histogram of",colnames(x)[i]))
+}
+
+  
+MyFunction((T1allData))
+```
+
+
+
+
+Namen der spalten festlegen
+
+
+
+```{r pressure, echo=TRUE}
+
+ MyFunction(T1allData)
+namenfestlegen<- function()
+  
+  data<-read.csv2(file.choose(), na="Na")
+
+# names<-(attributes(data)$names)
+names<-names(data)
+classes<-sapply(data,class)
+
+for(name in names[classes == 'numeric'])
+{
+    dev.new()
+    hist(data[,name]) # subset with [] not $
+}
+```
+
+```{r pressure, echo=TRUE}
+
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
