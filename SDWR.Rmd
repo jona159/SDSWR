@@ -13,7 +13,7 @@ CSV Datei einladen
 Als Funktion Daten einladen und anzeigen
 ```{r pressure, echo=TRUE}
 einladenundanzeigen<-function(){
-  T1<-read.csv2(file.choose(), na="Na")
+  T1<-read.csv2(file.choose(), na="Na", head=TRUE, sep=";")
   T1
   laenge<- length(T1) 
   laenge
