@@ -1,4 +1,4 @@
-einladenundanzeigen<-function(){
+statisticalAnalysis<-function(){
   #language <- dlgInput("If your CSV is english type: ENG, if it is german type: DE", Sys.info()["language"])$res
   seperation_list<-list("COMMA", "SEMICOLON", "EMPTY SPACE")
   response<-dlg_list(choices = seperation_list, multiple= FALSE, title="Seperation in your file")$res
@@ -17,7 +17,7 @@ einladenundanzeigen<-function(){
   pdf("Statistical_Analysis.pdf")
   plot_histograms(T1)
   plot_boxplots(T1)
-  dlg_message("A PDF with the analysis results can be found in your current workind directory")
+  dlg_message("A PDF named 'StatisticalAnalysis' with the analysis results can be found in your current workind directory")
   for(i in 1:ncol(T1)){
     new_df<-matrix(ncol=4, nrow=ncol(T1),byrow=TRUE)
     new_df<-as.data.frame(new_df)
@@ -143,7 +143,7 @@ correlation_analysis<-function(x) {
        
        current= getwd()
        st_write(converted, current, layer="coordinates", driver="ESRI Shapefile")
-       dlgMessage("You can now inspect this shapefile in a GIS")
+       dlgMessage("You can now inspect this shapefile in a GIS of your choice")
        
      }   
  } 
