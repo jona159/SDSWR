@@ -1,4 +1,18 @@
-statisticalAnalysis<-function(){
+plot_histograms<- function(x) for(i in 1:ncol(x))
+{
+  if(is.numeric(x[,i])){
+    hist(x[,i],main=paste("Histogram of",colnames(x)[i]))
+  }}
+
+plot_boxplots<- function(x) for(i in 1:ncol(x))
+{
+  if(is.numeric(x[,i])){
+    boxplot(x[,i],main=paste("Boxplot of",colnames(x)[i]))
+  }}
+
+
+# libraries: kutils, psych, svDialogs, gridExtra
+einladenundanzeigen<-function(){
   #language <- dlgInput("If your CSV is english type: ENG, if it is german type: DE", Sys.info()["language"])$res
   seperation_list<-list("COMMA", "SEMICOLON", "EMPTY SPACE")
   response<-dlg_list(choices = seperation_list, multiple= FALSE, title="Seperation in your file")$res
@@ -17,7 +31,7 @@ statisticalAnalysis<-function(){
   pdf("Statistical_Analysis.pdf")
   plot_histograms(T1)
   plot_boxplots(T1)
-  dlg_message("A PDF named 'StatisticalAnalysis' with the analysis results can be found in your current workind directory")
+  dlg_message("A PDF named Statistical Analysis with the analysis results can be found in your current workind directory")
   for(i in 1:ncol(T1)){
     new_df<-matrix(ncol=4, nrow=ncol(T1),byrow=TRUE)
     new_df<-as.data.frame(new_df)
@@ -33,11 +47,14 @@ statisticalAnalysis<-function(){
         p_value <- shapiro.test(new_df[,1])$p.value
         if(p_value>0.05){
           t_test <- t.test(new_df[,1])
+          View(t_test)
           if(t_test$p.value>0.05){
-            dlg_message("T Test resulted in p-Value above 0.05")
+            print("T Test resulted in p-Value above 0.05")
+            #dlg_message("T Test resulted in p-Value above 0.05")
           }
           else{
-            dlg_message("T Test resulted in p-Value lower than 0.05")
+            print("T Test resulted in p-Value lower than 0.05")
+            #dlg_message("T Test resulted in p-Value lower than 0.05")
           }
         }
       }
@@ -46,7 +63,6 @@ statisticalAnalysis<-function(){
     grid.table(new_df)
     x<-nrow(T1)
     x<-x-1
-    print(x)
     df<-matrix(ncol=ncol(T1), nrow=nrow(T1))
     df<-df[-1,]
     for(i in 1:ncol(T1))
@@ -64,8 +80,28 @@ statisticalAnalysis<-function(){
         
       }
     }
+    colnames(df)<-colnames(T1)
+    colnames(df) <- shorten(colnames(df), k=20, unique=FALSE)
     df<-df[, colSums(is.na(df)) != nrow(df)]
     View(df)
+    '''
+    print(length(df[,1]))
+    if(length(df[,1])>2 && length(df[,1])<4999){
+      p_value <- shapiro.test(df[,1])$p.value
+      print(paste0("P value is", p_value))
+      if(p_value>0.05){
+        t_test <- t.test(new_df[,1])
+        if(t_test$p.value>0.05){
+          print("T Test resulted in p-Value above 0.05")
+          #dlg_message("T Test resulted in p-Value above 0.05")
+        }
+        else{
+          print("T Test resulted in p-Value lower than 0.05")
+          #dlg_message("T Test resulted in p-Value lower than 0.05")
+        }
+      }}
+    
+    '''
     correlation <- cor(df)
     corrplot(correlation, method="circle", title = "Correlation Matrix", sig.level = 0.01, insig = "blank")
     
@@ -74,7 +110,7 @@ statisticalAnalysis<-function(){
   dev.off()
   
 }
-
+'''
 plot_histograms<- function(x) for(i in 1:ncol(x))
 {
   if(is.numeric(x[,i])){
@@ -86,7 +122,7 @@ plot_boxplots<- function(x) for(i in 1:ncol(x))
   if(is.numeric(x[,i])){
     boxplot(x[,i],main=paste("Boxplot of",colnames(x)[i]))
   }}
-
+'''
 correlation_analysis<-function(x) {
   T1<-read.csv2(file.choose(), na="Na", head=TRUE, sep=",", stringsAsFactors = FALSE)
   x<-nrow(T1)
@@ -122,28 +158,32 @@ correlation_analysis<-function(x) {
         dlg_message("Your CSV file does not have spatial information or the right structure, please use another file or rearrange")
      }
      else{
-       spatial_csv<-read.csv2(file.choose(), na="Na", head=TRUE, stringsAsFactors = FALSE)
+       spatial_csv<-read.csv2(file.choose(), na="Na", head=TRUE, sep = ",", stringsAsFactors = FALSE)
        latitude <- spatial_csv$latitude
        print(latitude)
        longitude <- spatial_csv$longitude
        print(longitude)
-       crs <- spatial_csv$CRS[1]
-       print(crs)
-       converted <-st_as_sf(spatial_csv, coords = c("latitude", "longitude"), crs = "WGS84")
+       coordinate_RS <- dlg_input(message="Type which CRS your data have", Sys.info()["coordinate"])$res
+       #coordinate_RS <- spatial_csv$CRS[1]
+       #print(crs)
+       converted <-st_as_sf(spatial_csv, coords = c("latitude", "longitude"), crs = coordinate_RS)
        class(converted)
+       st_crs(converted)
        head(st_crs(converted))
        head(st_coordinates(converted))
        View(converted)
        world <- ne_countries(scale = "medium", returnclass = "sf")
        print(ggplot(data = world) +
            geom_sf() +
+           #coord_sf(default_crs = NULL, lims_method = "geometry_bbox") + 
+           coord_sf(crs= coordinate_RS, lims_method = "geometry_bbox") +  
            geom_point(data = converted$geometry, col="yellow", size=3, aes(x= longitude, y=latitude)) +
            ggtitle("World map with your locations" ))
        
        
        current= getwd()
        st_write(converted, current, layer="coordinates", driver="ESRI Shapefile")
-       dlgMessage("You can now inspect this shapefile in a GIS of your choice")
+       dlgMessage("You can now inspect this shapefile in a GIS of your choice, the shapefile is in your current working directory")
        
      }   
  } 
