@@ -153,27 +153,35 @@ correlation_analysis<-function(x) {
   
 #libraries: sf, raster, rnaturalearth, rnaturalearthdata, ggplot2
  csv_to_shp <-function(x){ 
-   suited <- dlgInput("If your CSV contains columns named latitude, longitude and CRS, type: YES. Otherwise type: NO", Sys.info()["suited"])$res
-     if(suited == "NO"){
-        dlg_message("Your CSV file does not have spatial information or the right structure, please use another file or rearrange")
-     }
-     else{
-       spatial_csv<-read.csv2(file.choose(), na="Na", head=TRUE, sep = ",", stringsAsFactors = FALSE)
-       latitude <- spatial_csv$latitude
-       print(latitude)
-       longitude <- spatial_csv$longitude
-       print(longitude)
-       coordinate_RS <- dlg_input(message="Type which CRS your data have", Sys.info()["coordinate"])$res
-       #coordinate_RS <- spatial_csv$CRS[1]
-       #print(crs)
-       converted <-st_as_sf(spatial_csv, coords = c("latitude", "longitude"), crs = coordinate_RS)
-       class(converted)
-       st_crs(converted)
-       head(st_crs(converted))
-       head(st_coordinates(converted))
-       View(converted)
-       world <- ne_countries(scale = "medium", returnclass = "sf")
-       print(ggplot(data = world) +
+   dlgMessage("Your CSV must contain clumns named latitude and longitude with valid entries and the head row cannot be empty")
+   seperation_list<-list("COMMA", "SEMICOLON", "EMPTY SPACE")
+   response<-dlg_list(choices = seperation_list, multiple= FALSE, title="Seperation in your file")$res
+   if(response=="COMMA"){
+     spatial_csv<-read.csv2(file.choose(), na="Na", head=TRUE, sep=",", stringsAsFactors = FALSE)
+   }
+   else if(response=="SEMICOLON"){
+     spatial_csv<-read.csv2(file.choose(), na="Na", head=TRUE, sep=";", stringsAsFactors = FALSE)
+   }
+   else if(response=="EMPTY SPACE"){
+     spatial_csv<-read.csv2(file.choose(), na="Na", head=TRUE, stringsAsFactors = FALSE)
+   }
+   View(spatial_csv)
+   print(head(spatial_csv$Latitude))
+   latitude <- spatial_csv$latitude
+   print(latitude)
+   longitude <- spatial_csv$longitude
+   print(longitude)
+   coordinate_RS <- dlg_input(message="Type which CRS your data have", Sys.info()["coordinate_RS"])$res
+   #coordinate_RS <- spatial_csv$CRS[1]
+   #print(crs)
+   converted <-st_as_sf(spatial_csv, coords = c("latitude", "longitude"), crs = coordinate_RS)
+   class(converted)
+   st_crs(converted)
+   head(st_crs(converted))
+   head(st_coordinates(converted))
+   View(converted)
+   world <- ne_countries(scale = "medium", returnclass = "sf")
+   print(ggplot(data = world) +
            geom_sf() +
            #coord_sf(default_crs = NULL, lims_method = "geometry_bbox") + 
            coord_sf(crs= coordinate_RS, lims_method = "geometry_bbox") +  
@@ -181,12 +189,11 @@ correlation_analysis<-function(x) {
            ggtitle("World map with your locations" ))
        
        
-       current= getwd()
-       st_write(converted, current, layer="coordinates", driver="ESRI Shapefile")
-       dlgMessage("You can now inspect this shapefile in a GIS of your choice, the shapefile is in your current working directory")
+    current= getwd()
+    st_write(converted, current, layer="coordinates", driver="ESRI Shapefile")
+    dlgMessage("You can now inspect this shapefile in a GIS of your choice, the shapefile is in your current working directory")
        
-     }   
- } 
+}   
   
   
 
