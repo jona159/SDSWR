@@ -12,7 +12,7 @@ plot_boxplots<- function(x) for(i in 1:ncol(x))
 
 
 # libraries: kutils, psych, svDialogs, gridExtra
-einladenundanzeigen<-function(){
+statisticalAnalysis<-function(){
   #language <- dlgInput("If your CSV is english type: ENG, if it is german type: DE", Sys.info()["language"])$res
   seperation_list<-list("COMMA", "SEMICOLON", "EMPTY SPACE")
   response<-dlg_list(choices = seperation_list, multiple= FALSE, title="Seperation in your file")$res
@@ -43,7 +43,7 @@ einladenundanzeigen<-function(){
       new_df[i, 3] = var(T1[, i])
       new_df[i, 4] = sd(T1[, i])
       new_df<-new_df[complete.cases(new_df), ]
-      if(length(new_df[,1])>2 && length(new_df[,1])<4999){
+      if(length(new_df[,1])>2 && length(new_df[,1])<4999 && is.numeric(T1[,i])){
         p_value <- shapiro.test(new_df[,1])$p.value
         if(p_value>0.05){
           t_test <- t.test(new_df[,1])
@@ -153,7 +153,7 @@ correlation_analysis<-function(x) {
   
 #libraries: sf, raster, rnaturalearth, rnaturalearthdata, ggplot2
  csv_to_shp <-function(x){ 
-   dlgMessage("Your CSV must contain clumns named latitude and longitude with valid entries and the head row cannot be empty")
+   dlgMessage("Your CSV must contain clumns named latitude and longitude with valid entries and the head row cannot be empty. Please choose which seperator is used in your csv.")
    seperation_list<-list("COMMA", "SEMICOLON", "EMPTY SPACE")
    response<-dlg_list(choices = seperation_list, multiple= FALSE, title="Seperation in your file")$res
    if(response=="COMMA"){
