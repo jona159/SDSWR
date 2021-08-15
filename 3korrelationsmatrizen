@@ -80,10 +80,18 @@ statisticalAnalysis<-function(){
         
         p_value <- shapiro.test(T2[3:5000])$p.value
         title<-"P Value"
+        subtitle<-"A p value greater than 0.05 indicates normal distribution."
+        sug1<-"For p>0.05 look at Pearson Correlation Matrix"
+        sug2<-"For p<0.05 and big dataset look at Spearman"
+        sug3<-"For p<0.05 and small dataset look at Kendall"
         txt<-paste0("P_value of column ", colnames(df)[i], " is ", p_value)
         plot.new()
-        text(x=.5, y=.5,title, cex= 2, col="red")
-        text(x=.5, y=.1, txt)
+        text(x=.5, y=.8,title, cex= 2, col="red")
+        text(x=.5, y=.5, subtitle)
+        text(x=.5, y=.4, sug1)
+        text(x=.5, y=.3, sug2)
+        text(x=.5, y=.2, sug3)
+        text(x=.5, y=.1, txt, col="red")
         
       }
     }
