@@ -99,7 +99,7 @@ statisticalAnalysis<-function(){
     colnames(df) <- shorten(colnames(df), k=20, unique=FALSE)
     df<-df[, colSums(is.na(df)) != nrow(df)]
     View(df)
-    correlation <- cor(df)
+    correlation <- cor(df, method="pearson")
     corrplot(correlation, method="circle", title = "Correlation Matrix Pearson", sig.level = 0.01, insig = "blank")
     correlation <- cor(df, method="kendall")
     corrplot(correlation, method="circle", title = "Correlation Matrix Kendall", sig.level = 0.01, insig = "blank")
