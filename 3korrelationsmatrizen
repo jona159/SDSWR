@@ -65,6 +65,8 @@ statisticalAnalysis<-function(){
     x<-nrow(T1)
     x<-x-1
     df<-matrix(ncol=ncol(T1), nrow=nrow(T1))
+    colnames(df)<-colnames(T1)
+    View(df)
     df<-df[-1,]
     for(i in 1:ncol(T1))
     {
@@ -77,13 +79,15 @@ statisticalAnalysis<-function(){
         }
         
         p_value <- shapiro.test(T2[3:5000])$p.value
-        print(p_value)
-        
+        title<-"P Value"
+        txt<-paste0("P_value of column ", colnames(df)[i], " is ", p_value)
+        plot.new()
+        text(x=.5, y=.5,title, cex= 2, col="red")
+        text(x=.5, y=.1, txt)
         
       }
     }
-    
-    colnames(df)<-colnames(T1)
+    #colnames(df)<-colnames(T1)
     colnames(df) <- shorten(colnames(df), k=20, unique=FALSE)
     df<-df[, colSums(is.na(df)) != nrow(df)]
     View(df)
