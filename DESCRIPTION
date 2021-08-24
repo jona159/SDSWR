@@ -1,0 +1,23 @@
+Package: automatedStatisticalAnalysis
+Type: Package
+Title: Provides automated statistical analysis of CSV files 
+Version: 0.1.0
+Author: Lia Kirsch, Jonas Raabe
+Maintainer: Jonas Raabe <j_raab02@uni-muenster.de> , Lia Kirsch <l_kirs07@uni-muenster.de> 
+Description: The analysis includes boxplots, histograms, statistical measurements
+    and correlation matrices. Possibly a shapefile of coordinates can be extracted.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    kutils,
+    psych,
+    corrplot,
+    svDialogs,
+    gridExtra,
+    ggplot2,
+    raster,
+    rnaturalearth,
+    rnaturalearthdata,
+    sf
+RoxygenNote: 7.1.1
