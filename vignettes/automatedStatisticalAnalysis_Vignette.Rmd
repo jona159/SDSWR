@@ -1,0 +1,34 @@
+---
+title: "automatedStatisticalAnalysis_Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{automatedStatisticalAnalysis_Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+
+library(automatedStatisticalAnalysis)
+```
+**Usage** </br>
+*function __statisticalAnalysis__*
+```{r}
+statisticalAnalysis()
+```
+1. _Follow instructions from dialog boxes and choose the fitting option_ 
+2. _Inspect PDF file in your working directory_
+</br></br>
+*function _csv_to_shp_*
+```{r}
+# csv_to_shp()
+```
+1. _Follow instructions from dialog boxes and choose the fitting option_ 
+2. _Inspect output Shapefile in your working directory in a GIS_
