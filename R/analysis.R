@@ -18,7 +18,6 @@ plot_boxplots<- function(x) for(i in 1:ncol(x))
 #' statisticalAnalysis
 #' Provides automated statistical analysis of a CSV file
 #' @import kutils
-#' @import psych
 #' @import svDialogs
 #' @import gridExtra
 #' @import corrplot
@@ -125,7 +124,6 @@ statisticalAnalysis<-function(){
 #' csv_to_shp
 #' Converts CSV to SHP file
 #' @import sf
-#' @import raster
 #' @import rnaturalearth
 #' @import rnaturalearthdata
 #' @import ggplot2
