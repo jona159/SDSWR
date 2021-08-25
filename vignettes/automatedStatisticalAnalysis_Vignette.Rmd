@@ -1,6 +1,7 @@
 ---
 title: "automatedStatisticalAnalysis_Vignette"
 output: rmarkdown::html_vignette
+author: "Jonas Raabe, Lia Kirsch"
 vignette: >
   %\VignetteIndexEntry{automatedStatisticalAnalysis_Vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -15,7 +16,13 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+The automatedStatisticalAnalysis package was created to provide a simple automated data analysis. The package includes two functions that provide the data analysis and also the visualization of spatial data. This data analysis does not require any knowledge of a programming language or familiarization with a new program. Thus, the package can help people who would otherwise not perform a dataanalysis by thmeselves or work with the programming language R, to bring it closer.
 
+The package provides a data analysis based on a CSV file. The user should know how the CSV file is structured and built. Also, the user of the package is not taken out of the responsibility to interpret the results later. 
+The results are provided in the form of a Pdf file. 
+```{r}
+
+```
 library(automatedStatisticalAnalysis)
 ```
 **Usage** </br>
@@ -23,12 +30,23 @@ library(automatedStatisticalAnalysis)
 ```{r}
 statisticalAnalysis()
 ```
-1. _Follow instructions from dialog boxes and choose the fitting option_ 
-2. _Inspect PDF file in your working directory_
+The statisticalAnalysis function performs basic data analysis. Here, a histogram, boxplot, mean, median standard deviation and variance are formed from each numerical column.
+Since the analysis of which values are correlated with each other plays an important role in data analysis, the function also considers this point. First, it is calculated whether a normal distribution of the data is present, because this question is fundamental, which correlation function should be applied and considered later. Depending on the distribution of the values, the user is asked to consider the pearson, spearman or kendall correlation matrix.
+
+1. _Follow instructions from dialog boxes and choose the fitting option whether the csv is seperated via Comma, Seliconon or Empty Space _ 
+2. Choose your CSV file 
+3. _Inspect PDF file in your working directory_
+
+
 </br></br>
 *function _csv_to_shp_*
 ```{r}
 # csv_to_shp()
 ```
-1. _Follow instructions from dialog boxes and choose the fitting option_ 
-2. _Inspect output Shapefile in your working directory in a GIS_
+The function csv_to_shp allows a representation of data where there is a spatial mapping. The function creates a shaped file from this spatial data, which can be viewed in a Gis of choice.
+
+To be able to display your own spatial data and convert it into a shapedatei, the csv file should contain columns with the name latitude, longitude and valid entries, as well as no empty header.
+
+1. _Follow instructions from dialog boxes and choose the fitting option whether the csv is seperated via Comma, Seliconon or Empty Space _ 
+2.  Choose your CSV file 
+3. _Inspect output Shapefile in your working directory in a GIS_
